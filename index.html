@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8" />
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+/>
+
+<title>HourKWO</title>
+
+<!-- Fonte -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+rel="stylesheet"
+/>
+
+<style>
+
+/* RESET */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+:root{
+
+  --bg:#050816;
+  --card:#0c1120;
+  --text:#ffffff;
+  --muted:#8d95a8;
+  --gold:#ffb15e;
+}
+
+html,
+body{
+
+  width:100%;
+  height:100%;
+
+  overflow:hidden;
+}
+
+/* BODY */
+
+body{
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:14px;
+
+  background:
+  radial-gradient(circle at top left, rgba(255,166,0,.08), transparent 24%),
+  radial-gradient(circle at top right, rgba(36,74,255,.12), transparent 28%),
+  linear-gradient(to bottom,#040714,#050816);
+
+  font-family:'Inter',sans-serif;
+
+  color:white;
+
+  position:relative;
+}
+
+/* GLOW */
+
+body::before{
+
+  content:'';
+
+  position:absolute;
+
+  width:500px;
+  height:500px;
+
+  background:
+  radial-gradient(circle, rgba(255,177,94,.10), transparent 70%);
+
+  bottom:-250px;
+  left:-250px;
+
+  filter:blur(80px);
+
+  pointer-events:none;
+}
+
+body::after{
+
+  content:'';
+
+  position:absolute;
+
+  width:420px;
+  height:420px;
+
+  background:
+  radial-gradient(circle, rgba(50,90,255,.10), transparent 70%);
+
+  top:-200px;
+  right:-200px;
+
+  filter:blur(80px);
+
+  pointer-events:none;
+}
+
+/* CARD */
+
+.card{
+
+  width:min(100%, 760px);
+
+  max-height:calc(100vh - 28px);
+
+  overflow-y:auto;
+  overflow-x:hidden;
+
+  padding:
+  clamp(18px, 2vw, 30px);
+
+  border-radius:
+  clamp(22px, 3vw, 34px);
+
+  position:relative;
+
+  background:
+  linear-gradient(
+  145deg,
+  rgba(255,255,255,.06),
+  rgba(255,255,255,.02)
+  );
+
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+
+  border:1px solid rgba(255,255,255,.06);
+
+  box-shadow:
+  0 20px 70px rgba(0,0,0,.45);
+
+  scrollbar-width:none;
+
+  isolation:isolate;
+}
+
+.card::-webkit-scrollbar{
+  display:none;
+}
+
+/* REFLEXO PREMIUM APPLE */
+
+.card::before{
+
+  content:'';
+
+  position:absolute;
+
+  inset:-40%;
+
+  background:
+  linear-gradient(
+    115deg,
+
+    transparent 0%,
+
+    rgba(255,255,255,0.00) 30%,
+
+    rgba(255,255,255,0.018) 38%,
+
+    rgba(255,255,255,0.055) 45%,
+
+    rgba(255,255,255,0.095) 50%,
+
+    rgba(255,255,255,0.055) 55%,
+
+    rgba(255,255,255,0.018) 62%,
+
+    rgba(255,255,255,0.00) 70%,
+
+    transparent 100%
+  );
+
+  transform:
+  translateX(-55%)
+  translateY(-8%)
+  rotate(8deg);
+
+  animation:
+  glassReflection 14s cubic-bezier(.16,.84,.44,1) infinite;
+
+  pointer-events:none;
+
+  filter:blur(10px);
+
+  opacity:.9;
+
+  mix-blend-mode:screen;
+}
+
+/* PROFUNDIDADE */
+
+.card::after{
+
+  content:'';
+
+  position:absolute;
+
+  inset:0;
+
+  border-radius:inherit;
+
+  background:
+  linear-gradient(
+    to bottom,
+    rgba(255,255,255,.08),
+    rgba(255,255,255,.01) 18%,
+    transparent 35%
+  );
+
+  pointer-events:none;
+
+  opacity:.65;
+}
+
+/* ANIMAÇÃO CINEMATOGRÁFICA */
+
+@keyframes glassReflection{
+
+  0%{
+
+    transform:
+    translateX(-65%)
+    translateY(-10%)
+    rotate(8deg);
+
+    opacity:.15;
+  }
+
+  15%{
+    opacity:.35;
+  }
+
+  35%{
+    opacity:.9;
+  }
+
+  50%{
+
+    transform:
+    translateX(0%)
+    translateY(-2%)
+    rotate(8deg);
+
+    opacity:.55;
+  }
+
+  75%{
+    opacity:.25;
+  }
+
+  100%{
+
+    transform:
+    translateX(65%)
+    translateY(8%)
+    rotate(8deg);
+
+    opacity:.08;
+  }
+}
+
+/* TOPO */
+
+.top{
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:14px;
+
+  margin-bottom:
+  clamp(28px,4vw,44px);
+
+  position:relative;
+  z-index:2;
+}
+
+.brand{
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  font-size:
+  clamp(11px,2vw,14px);
+
+  font-weight:800;
+
+  letter-spacing:2px;
+}
+
+.dot{
+
+  width:12px;
+  height:12px;
+
+  border-radius:50%;
+
+  background:
+  linear-gradient(
+  135deg,
+  #ffd59c,
+  #ff9b3d
+  );
+
+  box-shadow:
+  0 0 16px rgba(255,177,94,.9);
+}
+
+.clock-box{
+
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  padding:
+  clamp(8px,2vw,12px)
+  clamp(12px,2vw,18px);
+
+  border-radius:999px;
+
+  background:rgba(255,255,255,.04);
+
+  border:1px solid rgba(255,255,255,.05);
+
+  font-size:
+  clamp(13px,2vw,18px);
+
+  font-weight:700;
+
+  backdrop-filter:blur(10px);
+}
+
+/* HERO */
+
+.hero{
+  text-align:center;
+  position:relative;
+  z-index:2;
+}
+
+.hero h1{
+
+  font-size:
+  clamp(32px, 5vw, 68px);
+
+  line-height:.92;
+
+  letter-spacing:
+  clamp(-2px,-0.2vw,-5px);
+
+  font-weight:900;
+
+  margin-bottom:16px;
+}
+
+.hero p{
+
+  max-width:560px;
+
+  margin:auto;
+
+  color:var(--muted);
+
+  font-size:
+  clamp(14px,2vw,18px);
+
+  line-height:1.6;
+}
+
+/* INPUT */
+
+.input-wrapper{
+
+  margin-top:
+  clamp(22px,4vw,34px);
+
+  display:flex;
+  justify-content:center;
+}
+
+.input-box{
+
+  width:100%;
+  max-width:520px;
+
+  min-height:
+  clamp(64px,8vw,90px);
+
+  display:flex;
+  align-items:center;
+  gap:
+  clamp(10px,2vw,18px);
+
+  padding:
+  0 clamp(14px,2vw,22px);
+
+  border-radius:
+  clamp(18px,2vw,26px);
+
+  background:
+  linear-gradient(
+  145deg,
+  rgba(255,255,255,.05),
+  rgba(255,255,255,.03)
+  );
+
+  border:1px solid rgba(255,177,94,.20);
+
+  box-shadow:
+  0 10px 30px rgba(0,0,0,.28);
+
+  transition:.3s ease;
+
+  backdrop-filter:blur(16px);
+}
+
+.input-box:hover{
+
+  border-color:
+  rgba(255,177,94,.35);
+}
+
+.input-box:focus-within{
+
+  transform:translateY(-2px);
+
+  border-color:
+  rgba(255,177,94,.55);
+
+  box-shadow:
+  0 14px 40px rgba(255,177,94,.08);
+}
+
+.icon{
+
+  width:
+  clamp(38px,5vw,52px);
+
+  height:
+  clamp(38px,5vw,52px);
+
+  min-width:
+  clamp(38px,5vw,52px);
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:rgba(255,255,255,.05);
+
+  font-size:
+  clamp(16px,2vw,22px);
+}
+
+/* INPUT TIME */
+
+input[type="time"]{
+
+  appearance:none;
+  -webkit-appearance:none;
+
+  width:100%;
+
+  border:none;
+  outline:none;
+
+  background:transparent;
+
+  color:white;
+
+  font-family:'Inter',sans-serif;
+
+  font-size:
+  clamp(30px,7vw,64px);
+
+  font-weight:900;
+
+  letter-spacing:-3px;
+
+  text-align:right;
+
+  cursor:pointer;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator{
+  opacity:0;
+  display:none;
+}
+
+input[type="time"]::-webkit-clear-button{
+  display:none;
+}
+
+input[type="time"]::-webkit-inner-spin-button{
+  display:none;
+}
+
+/* HINT */
+
+.hint{
+
+  margin-top:16px;
+
+  color:#7d8598;
+
+  font-size:
+  clamp(12px,2vw,14px);
+}
+
+/* DIVIDER */
+
+.divider{
+
+  width:100%;
+  height:1px;
+
+  margin:
+  clamp(26px,4vw,36px)
+  0;
+
+  background:
+  linear-gradient(
+  to right,
+  transparent,
+  rgba(255,255,255,.06),
+  transparent
+  );
+
+  position:relative;
+  z-index:2;
+}
+
+/* RESULTADO */
+
+.result{
+  text-align:center;
+  position:relative;
+  z-index:2;
+}
+
+.result span{
+
+  color:#aeb5c3;
+
+  font-size:
+  clamp(16px,2vw,24px);
+}
+
+.time{
+
+  margin-top:10px;
+
+  font-size:
+  clamp(52px, 8vw, 92px);
+
+  font-weight:900;
+
+  line-height:1;
+
+  letter-spacing:
+  clamp(-3px,-0.4vw,-7px);
+
+  background:
+  linear-gradient(
+  180deg,
+  #ffffff,
+  #ffcf9e
+  );
+
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* COUNTDOWN */
+
+.countdown-card{
+
+  margin-top:22px;
+
+  padding:18px;
+
+  border-radius:22px;
+
+  background:
+  linear-gradient(
+  145deg,
+  rgba(255,255,255,.04),
+  rgba(255,255,255,.02)
+  );
+
+  border:1px solid rgba(255,255,255,.05);
+
+  width:100%;
+  max-width:360px;
+
+  margin-left:auto;
+  margin-right:auto;
+
+  backdrop-filter:blur(14px);
+}
+
+.countdown-card small{
+
+  display:block;
+
+  color:#8d95a8;
+
+  margin-bottom:10px;
+
+  font-size:13px;
+
+  letter-spacing:.4px;
+}
+
+.countdown{
+
+  font-size:
+  clamp(28px,5vw,42px);
+
+  font-weight:900;
+
+  letter-spacing:-2px;
+
+  background:
+  linear-gradient(
+  180deg,
+  #ffffff,
+  #ffcf9e
+  );
+
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* TAG */
+
+.tag{
+
+  margin:18px auto 0;
+
+  width:max-content;
+
+  max-width:100%;
+
+  padding:
+  10px 16px;
+
+  border-radius:999px;
+
+  background:rgba(255,255,255,.03);
+
+  border:1px solid rgba(255,255,255,.05);
+
+  font-size:
+  clamp(12px,2vw,15px);
+
+  backdrop-filter:blur(10px);
+}
+
+/* FOOTER */
+
+.footer{
+
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+
+  gap:16px;
+
+  position:relative;
+  z-index:2;
+}
+
+.info{
+
+  padding:
+  clamp(14px,2vw,20px);
+
+  border-radius:
+  clamp(16px,2vw,22px);
+
+  background:rgba(255,255,255,.03);
+
+  border:1px solid rgba(255,255,255,.05);
+
+  display:flex;
+  align-items:center;
+  gap:14px;
+
+  backdrop-filter:blur(12px);
+}
+
+.info-icon{
+
+  font-size:
+  clamp(18px,2vw,24px);
+}
+
+.info small{
+
+  display:block;
+
+  color:#7d8598;
+
+  margin-bottom:4px;
+
+  font-size:
+  clamp(11px,2vw,13px);
+}
+
+.info strong{
+
+  font-size:
+  clamp(16px,2vw,20px);
+}
+
+/* RESPONSIVO */
+
+@media(max-width:768px){
+
+  .footer{
+    grid-template-columns:1fr;
+  }
+
+  .hero h1 br{
+    display:none;
+  }
+}
+
+@media(max-width:520px){
+
+  body{
+    align-items:flex-start;
+  }
+
+  .top{
+    flex-wrap:wrap;
+  }
+
+  .hero{
+    text-align:left;
+  }
+
+  .hero p{
+    margin:0;
+  }
+
+  .result{
+    text-align:left;
+  }
+
+  .tag{
+    margin-left:0;
+  }
+
+  .countdown-card{
+    margin-left:0;
+  }
+
+  input{
+    text-align:left;
+  }
+}
+
+@media(max-height:720px){
+
+  body{
+    align-items:flex-start;
+  }
+
+  .card{
+    margin-top:10px;
+  }
+
+  .hero h1{
+    font-size:clamp(28px,5vw,54px);
+  }
+
+  .time{
+    font-size:clamp(44px,7vw,72px);
+  }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+  <!-- TOPO -->
+  <div class="top">
+
+    <div class="brand">
+      <div class="dot"></div>
+      WORKTIME
+    </div>
+
+    <div class="clock-box">
+      🕒
+      <span id="currentClock">00:00</span>
+    </div>
+
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+
+    <h1>
+      Que horas você<br>
+      chegou hoje?
+    </h1>
+
+    <p>
+      Digite seu horário de entrada e descubra instantaneamente o horário ideal para sair.
+    </p>
+
+    <!-- INPUT -->
+    <div class="input-wrapper">
+
+      <div class="input-box">
+
+        <div class="icon">
+          🕒
+        </div>
+
+        <input
+          type="time"
+          id="timeInput"
+          value="08:00"
+          step="60"
+        />
+
+      </div>
+
+    </div>
+
+    <div class="hint">
+      Pressione Enter para calcular
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RESULTADO -->
+  <div class="result">
+
+    <span>Você poderá sair às:</span>
+
+    <div class="time" id="output">
+      17:48
+    </div>
+
+    <!-- COUNTDOWN -->
+    <div class="countdown-card">
+
+      <small>Faltam para ir embora</small>
+
+      <div class="countdown" id="countdown">
+        00:00:00
+      </div>
+
+    </div>
+
+    <div class="tag">
+      ✨ Tenha um ótimo expediente.
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+
+    <div class="info">
+
+      <div class="info-icon">
+        📅
+      </div>
+
+      <div>
+        <small>Jornada diária</small>
+        <strong>9h48min</strong>
+      </div>
+
+    </div>
+
+    <div class="info">
+
+      <div class="info-icon">
+        ⏰
+      </div>
+
+      <div>
+        <small>Horário atual</small>
+        <strong id="footerClock">00:00</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const input =
+document.getElementById('timeInput');
+
+const output =
+document.getElementById('output');
+
+const countdown =
+document.getElementById('countdown');
+
+let exitDate = null;
+
+/* RELÓGIO */
+
+function updateClock(){
+
+  const now = new Date();
+
+  const h =
+  String(now.getHours()).padStart(2,'0');
+
+  const m =
+  String(now.getMinutes()).padStart(2,'0');
+
+  const current = `${h}:${m}`;
+
+  document.getElementById('currentClock').textContent =
+  current;
+
+  document.getElementById('footerClock').textContent =
+  current;
+
+  updateCountdown();
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+/* ENTER */
+
+input.addEventListener('keydown',(e)=>{
+
+  if(e.key === 'Enter'){
+    calculateExit();
+  }
+
+});
+
+/* AUTO */
+
+input.addEventListener('change',calculateExit);
+
+/* CÁLCULO */
+
+function calculateExit(){
+
+  const value = input.value;
+
+  if(!value.includes(':')){
+    return;
+  }
+
+  const [hours, minutes] =
+  value.split(':').map(Number);
+
+  if(
+    isNaN(hours) ||
+    isNaN(minutes)
+  ){
+    return;
+  }
+
+  /* JORNADA */
+
+  const workMinutes =
+  (9 * 60) + 48;
+
+  const totalMinutes =
+  (hours * 60) +
+  minutes +
+  workMinutes;
+
+  const exitHour =
+  Math.floor((totalMinutes / 60) % 24);
+
+  const exitMinute =
+  totalMinutes % 60;
+
+  const formatted =
+  `${String(exitHour).padStart(2,'0')}:${String(exitMinute).padStart(2,'0')}`;
+
+  output.textContent = formatted;
+
+  /* DATA SAÍDA */
+
+  const now = new Date();
+
+  exitDate = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    exitHour,
+    exitMinute,
+    0
+  );
+
+  /* ANIMAÇÃO */
+
+  output.animate([
+    {
+      opacity:.4,
+      transform:'translateY(10px) scale(.96)'
+    },
+    {
+      opacity:1,
+      transform:'translateY(0) scale(1)'
+    }
+  ],{
+    duration:420,
+    easing:'cubic-bezier(.2,.8,.2,1)'
+  });
+
+  updateCountdown();
+}
+
+/* COUNTDOWN */
+
+function updateCountdown(){
+
+  if(!exitDate) return;
+
+  const now = new Date();
+
+  let diff =
+  exitDate.getTime() -
+  now.getTime();
+
+  if(diff <= 0){
+
+    countdown.textContent =
+    'Expediente encerrado';
+
+    return;
+  }
+
+  const hours =
+  Math.floor(diff / 1000 / 60 / 60);
+
+  const minutes =
+  Math.floor((diff / 1000 / 60) % 60);
+
+  const seconds =
+  Math.floor((diff / 1000) % 60);
+
+  countdown.textContent =
+  `${String(hours).padStart(2,'0')}:` +
+  `${String(minutes).padStart(2,'0')}:` +
+  `${String(seconds).padStart(2,'0')}`;
+}
+
+/* INICIAL */
+
+calculateExit();
+
+</script>
+
+</body>
+</html>
