@@ -1,7 +1,6 @@
 (function(){
   const { DOM, Core, PontoMais } = window.HourKWO;
   let exitDate = null;
-  let lastSync = null;
 
   function nowTime(){
     const now = new Date();
@@ -26,6 +25,9 @@
     const now = new Date();
     exitDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0, 0);
     if(exitDate.getTime() < now.getTime() && h < 12) exitDate.setDate(exitDate.getDate()+1);
+
+    localStorage.setItem("hourkwo.entry", DOM.input.value);
+    localStorage.setItem("hourkwo.extra", DOM.extraToggle.checked ? "1" : "0");
 
     DOM.output.animate(
       [{opacity:.45,transform:"translateY(10px) scale(.97)"},{opacity:1,transform:"translateY(0) scale(1)"}],
@@ -52,7 +54,7 @@
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
     const s = seconds % 60;
-    DOM.countdown.textContent = [h,m,s].map((v,i)=> i === 0 ? String(v).padStart(2,"0") : String(v).padStart(2,"0")).join(":");
+    DOM.countdown.textContent = [h,m,s].map(v => String(v).padStart(2,"0")).join(":");
   }
 
   function setStatus(state, text){
@@ -60,41 +62,55 @@
     DOM.syncStatus.textContent = text;
   }
 
-  function renderPontomais(payload){
-    if(!payload || !payload.entrada){
-      setStatus("waiting","PontoMais · nenhum registro de hoje detectado");
-      DOM.syncHint.textContent = "Deixe a tela de ponto do PontoMais aberta e clique em Sincronizar novamente.";
-      return;
-    }
+  function renderImportedTimes(times, source){
+    if(!Array.isArray(times) || !times.length) return;
 
-    lastSync = payload;
-    DOM.input.value = payload.entrada;
-    DOM.recordEntry.textContent = payload.entrada || "--:--";
-    DOM.recordExit.textContent = payload.saida || "Em aberto";
-    DOM.recordLast.textContent = payload.ultimoRegistro || payload.entrada || "--:--";
+    const clean = times.filter(v => /^\d{2}:\d{2}$/.test(v)).slice(0, 12);
+    if(!clean.length) return;
+
+    DOM.input.value = clean[0];
+    DOM.recordEntry.textContent = clean[0];
+    DOM.recordExit.textContent = clean.length >= 2 && clean.length % 2 === 0 ? clean[clean.length-1] : "Em aberto";
+    DOM.recordLast.textContent = clean[clean.length-1];
     DOM.records.hidden = false;
-    setStatus("connected","PontoMais · sincronizado");
-    DOM.syncHint.textContent = "Dados recebidos do PontoMais " + (payload.capturadoEm ? "às " + payload.capturadoEm : "") + ".";
+    setStatus("connected", source === "mobile" ? "PontoMais · importado do celular" : "PontoMais · sincronizado");
+    DOM.syncHint.textContent = clean.length > 1
+      ? "Marcações recebidas: " + clean.join(" · ")
+      : "Entrada recebida: " + clean[0];
+
     calculateExit();
   }
 
-  function handleStatus(status){
-    if(!status) return;
-    if(status.state === "extension-missing"){
-      setStatus("error","Extensão · não detectada");
-      DOM.syncHint.textContent = "A extensão do HourKWO não está disponível nesta página.";
-      return;
+  function readUrlImport(){
+    const params = new URLSearchParams(location.search);
+    const times = params.get("times");
+    const entry = params.get("entry");
+    const exit = params.get("exit");
+    const source = params.get("source") || "mobile";
+
+    if(times){
+      renderImportedTimes(times.split(",").map(v => v.trim()), source);
+      history.replaceState({}, "", location.pathname);
+      return true;
     }
-    if(status.state === "pontomais-detected"){
-      setStatus("waiting","PontoMais · aba detectada");
+
+    if(entry){
+      const values = [entry];
+      if(exit) values.push(exit);
+      renderImportedTimes(values, source);
+      history.replaceState({}, "", location.pathname);
+      return true;
     }
-    if(status.state === "capturing"){
-      setStatus("waiting","PontoMais · lendo dados da jornada");
-    }
-    if(status.state === "error"){
-      setStatus("error","PontoMais · falha ao ler dados");
-      DOM.syncHint.textContent = status.message || "Não foi possível ler a jornada.";
-    }
+
+    return false;
+  }
+
+  function restoreLocalState(){
+    const entry = localStorage.getItem("hourkwo.entry");
+    const extra = localStorage.getItem("hourkwo.extra");
+
+    if(entry) DOM.input.value = entry;
+    if(extra === "1") DOM.extraToggle.checked = true;
   }
 
   DOM.input.addEventListener("change", calculateExit);
@@ -103,15 +119,31 @@
   DOM.syncButton.addEventListener("click", () => {
     PontoMais.requestSync();
     setStatus("waiting","PontoMais · sincronizando...");
-    DOM.syncHint.textContent = "Solicitando novamente os dados da jornada...";
+    DOM.syncHint.textContent = "Solicitando os dados do PontoMais...";
   });
 
-  window.addEventListener("hourkwo:noop",()=>{});
-  window.addEventListener(PontoMais.DATA_EVENT, e => renderPontomais(e.detail));
-  window.addEventListener(PontoMais.STATUS_EVENT, e => handleStatus(e.detail));
+  window.addEventListener(PontoMais.DATA_EVENT, e => renderImportedTimes(
+    e.detail?.horarios || (e.detail?.entrada ? [e.detail.entrada, e.detail.saida].filter(Boolean) : []),
+    e.detail?.fonte === "mobile" ? "mobile" : "extension"
+  ));
+  window.addEventListener(PontoMais.STATUS_EVENT, e => {
+    const status = e.detail;
+    if(!status) return;
+    if(status.state === "extension-missing"){
+      setStatus("error","Extensão · não detectada");
+      DOM.syncHint.textContent = "No celular, use a sincronização mobile em /mobile/.";
+    }
+    if(status.state === "pontomais-detected") setStatus("waiting","PontoMais · aba detectada");
+    if(status.state === "capturing") setStatus("waiting","PontoMais · lendo dados da jornada");
+  });
 
   setInterval(updateClock,1000);
+  restoreLocalState();
   updateClock();
   calculateExit();
-  PontoMais.init();
+  if(!readUrlImport()) PontoMais.init();
+
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  }
 })();

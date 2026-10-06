@@ -1,0 +1,14 @@
+{
+  "name":"HourKWO",
+  "short_name":"HourKWO",
+  "description":"Calculadora de jornada com integração opcional ao PontoMais.",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#050816",
+  "theme_color":"#050816",
+  "lang":"pt-BR",
+  "icons":[
+    {"src":"assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}

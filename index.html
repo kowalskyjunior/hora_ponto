@@ -3,7 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050816">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>HourKWO</title>
+<link rel="manifest" href="./manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -19,11 +23,12 @@
   <section class="hero">
     <div class="eyebrow" id="syncStatus" data-state="waiting">PontoMais · aguardando sincronização</div>
     <h1>Que horas você<br>chegou hoje?</h1>
-    <p>O horário de entrada pode ser sincronizado automaticamente a partir do PontoMais. A entrada manual continua disponível como fallback.</p>
+    <p>Use o PontoMais para trazer suas marcações ou informe a entrada manualmente.</p>
 
     <div class="sync-row">
       <a class="action secondary" href="https://atma2.pontomais.com.br/meu-perfil" target="_blank" rel="noopener noreferrer">Abrir PontoMais</a>
       <button class="action primary" id="syncButton" type="button">Sincronizar</button>
+      <a class="action secondary" href="./mobile/">Usar no celular</a>
     </div>
 
     <div class="input-wrapper">
@@ -33,7 +38,7 @@
       </div>
     </div>
 
-    <div class="hint" id="syncHint">Abra o PontoMais, deixe a tela de ponto carregada e clique em Sincronizar.</div>
+    <div class="hint" id="syncHint">No desktop, use a extensão. No celular, use o fluxo de sincronização mobile.</div>
 
     <div class="records" id="records" hidden>
       <div><span>Entrada</span><strong id="recordEntry">--:--</strong></div>
@@ -65,14 +70,8 @@
   <div class="divider"></div>
 
   <footer class="footer">
-    <div class="info">
-      <div class="info-icon">⌁</div>
-      <div><small>Jornada diária</small><strong id="journeyText">9h48min</strong></div>
-    </div>
-    <div class="info">
-      <div class="info-icon">◷</div>
-      <div><small>Horário atual</small><strong id="footerClock">--:--</strong></div>
-    </div>
+    <div class="info"><div class="info-icon">⌁</div><div><small>Jornada diária</small><strong id="journeyText">9h48min</strong></div></div>
+    <div class="info"><div class="info-icon">◷</div><div><small>Horário atual</small><strong id="footerClock">--:--</strong></div></div>
   </footer>
 </main>
 <script src="src/core/timeCalculator.js"></script>

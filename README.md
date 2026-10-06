@@ -1,26 +1,21 @@
 # HourKWO
 
-Calculadora de jornada com sincronização opcional com o PontoMais.
+Calculadora de jornada com suporte a desktop e mobile.
 
-## Estrutura
+## Mobile
 
-- `src/core`: regras de cálculo da jornada.
-- `src/services`: comunicação entre a aplicação e a extensão.
-- `src/ui`: estilos e referências do DOM.
-- `extension`: ponte do Chrome entre o PontoMais e o HourKWO.
+O HourKWO pode ser instalado como PWA em navegadores que suportem instalação de aplicações web.
 
-## Integração com PontoMais
+Para sincronizar o PontoMais no celular, há uma limitação importante: o Chrome para Android/iOS não executa extensões como o Chrome desktop. Em iOS, Safari permite Web Extensions, mas elas precisam ser distribuídas como uma extensão de Safari empacotada em um app. Por isso a branch também oferece um fluxo mobile sem extensão: um bookmarklet que lê os horários visíveis na página do PontoMais e os envia ao HourKWO.
 
-A integração não grava senha do PontoMais. A extensão observa as respostas de rede que a página já recebe e extrai os registros de jornada do dia. Ela também tenta localizar horários rotulados no DOM como fallback.
+Abra `mobile/` pelo navegador para ver as instruções de configuração.
 
-Fluxo:
+## Desenvolvimento
 
-1. Carregue a extensão em `chrome://extensions` com **Modo do desenvolvedor**.
-2. Use **Carregar sem compactação** e selecione a pasta `extension/`.
-3. Recarregue a aba do PontoMais.
-4. Abra o HourKWO.
-5. Clique em **Sincronizar**.
+A lógica de cálculo está em `src/core`, a ponte do PontoMais em `src/services` e a integração de extensão em `extension/`.
 
-A interface mostra a fonte do dado, a entrada, a saída registrada e a última marcação.
+A entrada também pode ser importada pela URL, por exemplo:
 
-> Observação: o PontoMais pode alterar seus endpoints ou a estrutura das respostas. Por isso a extensão tem parser tolerante e diagnóstico no console com o prefixo `[HourKWO/PontoMais]`.
+`?times=08:07,12:01,13:03,17:56&source=mobile`
+
+O HourKWO usa a primeira marcação como entrada e exibe os demais horários capturados.
