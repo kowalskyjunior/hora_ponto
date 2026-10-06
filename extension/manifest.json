@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "HourKWO · Ponte PontoMais",
+  "version": "0.5.0",
+  "description": "Captura os registros de jornada que o PontoMais entrega ao navegador e sincroniza com o HourKWO.",
+  "permissions": ["storage", "tabs"],
+  "host_permissions": [
+    "https://atma2.pontomais.com.br/*",
+    "https://app2.pontomais.com.br/*",
+    "https://app.pontomaisweb.com.br/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://atma2.pontomais.com.br/*",
+        "https://app2.pontomais.com.br/*",
+        "https://app.pontomaisweb.com.br/*"
+      ],
+      "js": ["pontomais-parser.js", "pontomais-page.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://atma2.pontomais.com.br/*",
+        "https://app2.pontomais.com.br/*",
+        "https://app.pontomaisweb.com.br/*",
+        "http://localhost/*",
+        "http://127.0.0.1/*",
+        "https://kowalskyjunior.github.io/*",
+        "file:///*"
+      ],
+      "js": ["bridge.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "background": {
+    "service_worker": "service-worker.js"
+  }
+}
